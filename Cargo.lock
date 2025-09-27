@@ -9049,6 +9049,28 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "57397d16646700483b67d2dd6511d79318f9d057fdbd21a4066aeac8b41d310a"
 
 [[package]]
+name = "rig-azure"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "async-stream",
+ "base64 0.22.1",
+ "dotenvy",
+ "reqwest 0.12.20",
+ "rig-core 0.20.0",
+ "rig-derive",
+ "schemars 1.0.4",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.12",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "url",
+ "uuid 1.17.0",
+]
+
+[[package]]
 name = "rig-bedrock"
 version = "0.3.1"
 dependencies = [
