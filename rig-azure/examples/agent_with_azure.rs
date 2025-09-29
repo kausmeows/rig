@@ -1,6 +1,6 @@
 use rig::client::CompletionClient;
 use rig::{agent::AgentBuilder, completion::Prompt, loaders::FileLoader};
-use rig_azure::{client::Client, completion::PHI_4   };
+use rig_azure::{client::Client, completion::PHI_4};
 use tracing::info;
 
 mod common;

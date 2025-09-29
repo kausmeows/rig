@@ -35,12 +35,11 @@ impl CompletionModel {
         &self.client
     }
 
-    /// Build the completion endpoint URL for Azure OpenAI Service
-    /// Pattern: https://{endpoint}/openai/deployments/{deployment}/chat/completions?api-version=2024-02-15-preview
-    fn completion_url(&self, _project: &str) -> String {
-        let base_endpoint = self.client.endpoint().trim_end_matches("/models").trim_end_matches("/");
-        format!("{}/openai/deployments/{}/chat/completions?api-version=2024-02-15-preview", 
-                base_endpoint, self.model)
+    /// Build the completion endpoint URL for Azure AI Foundry
+    /// Pattern: https://{resource}.services.ai.azure.com/models/chat/completions?api-version=2024-05-01-preview
+    fn completion_url(&self) -> String {
+        let base_endpoint = self.client.endpoint().trim_end_matches("/");
+        format!("{}/chat/completions?api-version=2024-05-01-preview", base_endpoint)
     }
 
     async fn send_completion_request(
@@ -50,22 +49,17 @@ impl CompletionModel {
         // Set the model name in the request
         request.model = self.model.clone();
 
-        // For now, we'll use a default project name
-        // In a real implementation, this should be configurable
-        let project = std::env::var("AZURE_AI_FOUNDRY_PROJECT")
-            .unwrap_or_else(|_| "default".to_string());
-
-        let url = self.completion_url(&project);
+        let url = self.completion_url();
         
         // Optional debug logging (enable with RUST_LOG=debug)
-        tracing::debug!("Making Azure OpenAI request to: {}", url);
+        tracing::debug!("Making Azure AI Foundry request to: {}", url);
         tracing::debug!("Model: {}, Endpoint: {}", self.model, self.client.endpoint());
         
         let response = self
             .client
             .http_client()
             .post(&url)
-            .header("api-key", self.client.api_key())  // Azure OpenAI uses 'api-key' header
+            .header("api-key", self.client.api_key())  // Azure AI Foundry uses 'api-key' header
             .header("Content-Type", "application/json")
             .json(&request)
             .send()
